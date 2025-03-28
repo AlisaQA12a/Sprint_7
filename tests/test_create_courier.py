@@ -18,7 +18,7 @@ class TestCreateCourier:
             "password": generate_password(),
             "firstName": generate_firstname(),
         }
-        response = requests.post(f"{Urls.BASE}{Urls.COURIER_CREATE}", data=payload)
+        response = requests.post(Urls.COURIER_CREATE, data=payload)
         assert response.status_code == 201 and response.json().get("ok") is True
 
     @allure.title("Нельзя создать двух одинаковых курьеров")
@@ -29,7 +29,7 @@ class TestCreateCourier:
             "password": generate_password(),
             "firstName": generate_firstname(),
         }
-        response = requests.post(f"{Urls.BASE}{Urls.COURIER_CREATE}", data=payload)
+        response = requests.post(Urls.COURIER_CREATE, data=payload)
         assert response.status_code == 409 and DataMessage.MESSAGE_LOGIN_IS_USED in response.json().get("message")
 
     @allure.title("Получение ошибки,если  при создании пользователя не указывать одно из обязательных полей")
@@ -57,7 +57,7 @@ class TestCreateCourier:
         ],
     )
     def test_can_not_create_courier_with_empty_input(self, signup_data):
-        response = requests.post(f"{Urls.BASE}{Urls.COURIER_CREATE}", data=signup_data)
+        response = requests.post(Urls.COURIER_CREATE, data=signup_data)
         assert (
                 response.status_code == 400
                 and DataMessage.MESSAGE_CREATE_COURIER_MISSED_DATA in response.json().get("message")
